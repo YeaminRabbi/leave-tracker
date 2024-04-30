@@ -7,6 +7,10 @@ use App\Models\LeaveApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Toastr;
+use App\Mail\ApplicationApproved;
+use App\Mail\ApplicationRejected;
+use App\Mail\ApplicationSubmitted;
+use Illuminate\Support\Facades\Mail;
 
 class LeaveApplicationController extends Controller
 {
@@ -49,6 +53,11 @@ class LeaveApplicationController extends Controller
         $application->reason = $request->reason;
         $application->save();
 
+        if($application)
+        {
+            $user = Auth::user();
+            Mail::to($user->email)->send(new ApplicationSubmitted($application));
+        }
         Toastr::success("Application submited Successfully");
         return back();       
     }
@@ -83,6 +92,14 @@ class LeaveApplicationController extends Controller
         $leaveApplication->comment = $request->comment;
         $leaveApplication->status = $request->status;
         $leaveApplication->save();
+
+        if ($leaveApplication->status == 1) {
+            $user = $leaveApplication->user;
+            Mail::to($user->email)->send(new ApplicationApproved($leaveApplication));
+        }else if($leaveApplication->status == -1){
+            $user = $leaveApplication->user;
+            Mail::to($user->email)->send(new ApplicationRejected($leaveApplication));
+        }
 
         Toastr::success("Application updated Successfully");
         return back();   

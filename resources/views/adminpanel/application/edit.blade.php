@@ -68,7 +68,7 @@
                         @if ($leaveApplication->comment)
                             <hr>
                             <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label" for="basic-default-comment">Comment </label>
+                                <label class="col-sm-2 col-form-label" for="basic-default-comment">Comment <span style="color: red;">*</span></label>
                                 <div class="col-sm-10">
                                     <textarea name="comment" class="form-control" cols="30" rows="10" disabled>{{ $leaveApplication->comment }}</textarea>
                                 </div>

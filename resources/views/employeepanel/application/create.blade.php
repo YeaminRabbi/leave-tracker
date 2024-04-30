@@ -24,7 +24,7 @@
                                     <option selected disabled>--select type--</option>
                                     <option value="CASUAL">Casual Leave</option>
                                     <option value="SICK">Sick Leave</option>
-                                    <option value="Emergency">Emergency Leave</option>
+                                    <option value="EMERGENCY">Emergency Leave</option>
                                 </select>
                             </div>
                         </div>
