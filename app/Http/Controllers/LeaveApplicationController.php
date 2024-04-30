@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\LeaveApplication;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Toastr;
 
 class LeaveApplicationController extends Controller
 {
@@ -12,7 +15,10 @@ class LeaveApplicationController extends Controller
      */
     public function index()
     {
-        //
+        $applications = LeaveApplication::where('user_id', Auth::id())->latest()->get();
+
+        return view('employeepanel.application.index', compact('applications'));
+
     }
 
     /**
@@ -20,7 +26,7 @@ class LeaveApplicationController extends Controller
      */
     public function create()
     {
-        //
+        return view('employeepanel.application.create');
     }
 
     /**
@@ -28,7 +34,23 @@ class LeaveApplicationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'type' => 'required',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'reason' => 'required',
+        ]);
+
+        $application = new LeaveApplication();
+        $application->user_id = Auth::id();
+        $application->type = $request->type;
+        $application->start_date = $request->start_date;
+        $application->end_date = $request->end_date;
+        $application->reason = $request->reason;
+        $application->save();
+
+        Toastr::success("Application submited Successfully");
+        return back();       
     }
 
     /**
@@ -36,30 +58,34 @@ class LeaveApplicationController extends Controller
      */
     public function show(LeaveApplication $leaveApplication)
     {
-        //
+        return view('employeepanel.application.show', compact('leaveApplication'));
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(LeaveApplication $leaveApplication)
+    public function getApplicationList()
     {
-        //
+        $applications = LeaveApplication::with('user')->latest()->get();
+        return view('adminpanel.application.index', compact('applications'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, LeaveApplication $leaveApplication)
+    public function getApplicationEdit(LeaveApplication $leaveApplication)
     {
-        //
+        return view('adminpanel.application.edit', compact('leaveApplication'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(LeaveApplication $leaveApplication)
+    public function applicationEditForm(Request $request, LeaveApplication $leaveApplication)
     {
-        //
+        $request->validate([
+            'comment' => 'required',
+            'status' => 'required',
+        ]);
+
+        $leaveApplication->comment = $request->comment;
+        $leaveApplication->status = $request->status;
+        $leaveApplication->save();
+
+        Toastr::success("Application updated Successfully");
+        return back();   
+
     }
 }

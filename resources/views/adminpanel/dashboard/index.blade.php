@@ -17,8 +17,7 @@
                                 ?> 
                                 </p>
 
-                                <a href="{{ route('admin_dashboard') }}" class="btn btn-sm btn-outline-primary">View
-                                    Profile</a>
+                                <a href="{{ route('admin_dashboard') }}" class="btn btn-sm btn-outline-primary">Read More</a>
                             </div>
                         </div>
                         <div class="col-sm-5 text-center text-sm-left">

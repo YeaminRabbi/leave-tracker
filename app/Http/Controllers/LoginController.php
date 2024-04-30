@@ -33,9 +33,8 @@ class LoginController extends Controller
                     Auth::logout();
                     return back()->with('error', "Your account is blocked or in approval status, please contact admin");
                 }
-                // return redirect()->route('admin_dashboard');
+                return redirect()->route('admin_dashboard');
 
-                return 'emplyeeo_dashboard';
             }
 
 
