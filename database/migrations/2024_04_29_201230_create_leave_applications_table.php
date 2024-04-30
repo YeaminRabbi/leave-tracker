@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('type')->comment('Casual | Sick | Emergency');
-            $table->string('start_time');
-            $table->string('end_time');
+            $table->string('start_date');
+            $table->string('end_date');
             $table->text('reason');
             $table->tinyInteger('status')->comment('0=pending : 1=approved; -1=rejected')->default(0);
             $table->text('comment')->nullable();

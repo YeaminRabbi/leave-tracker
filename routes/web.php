@@ -26,9 +26,8 @@ Route::get('/home', function () {
 Route::post('/user-login', [LoginController::class, 'LOGIN'])->name('LOGIN');
 Route::post('/user-register', [RegistrationController::class, 'REGISTER'])->name('REGISTER');
 
-#~~~~~~~~~~~~ all admin panel routes ~~~~~~~~~~~~~~
 
-Route::group(['prefix' => 'admin','middleware' => ['auth', 'role:admin']], function() {
+Route::group(['prefix' => 'admin','middleware' => ['auth', 'role:admin|employee']], function() {
     
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin_dashboard');
 
@@ -36,6 +35,11 @@ Route::group(['prefix' => 'admin','middleware' => ['auth', 'role:admin']], funct
     Route::get('/profile/edit', [ProfileController::class, 'profile_edit'])->name('profile_edit');
     Route::post('/profile/update', [ProfileController::class, 'profile_update'])->name('profile_update');
 
+});
+
+
+Route::group(['prefix' => 'admin','middleware' => ['auth', 'role:admin']], function() {
+    
     Route::get('/role-management', [RoleManagementController::class, 'index'])->name('role_management');
     Route::post('/role-management/add', [RoleManagementController::class, 'role_add'])->name('role_add');
     Route::get('/role-management/delete/{id}', [RoleManagementController::class, 'role_delete'])->name('role_delete');
@@ -57,5 +61,15 @@ Route::group(['prefix' => 'admin','middleware' => ['auth', 'role:admin']], funct
     Route::get('/user/approve/{id}', [UserController::class, 'userApprove'])->name('user.approve');
     Route::get('/user/black/{id}', [UserController::class, 'userBlock'])->name('user.block');
     
+    Route::get('/applications/list/view/', [LeaveApplicationController::class, 'getApplicationList'])->name('admin.applications');
+    Route::get('/application/form/edit/{leaveApplication}', [LeaveApplicationController::class, 'getApplicationEdit'])->name('admin.applications.edit');
+    Route::post('/application/form/submit/{leaveApplication}', [LeaveApplicationController::class, 'applicationEditForm'])->name('admin.applications.edit.form');
+
+});
+
+
+Route::group(['prefix' => 'admin','middleware' => ['auth', 'role:employee']], function() {
+    
+    Route::resource('leave-application', LeaveApplicationController::class);
 
 });

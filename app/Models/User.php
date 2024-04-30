@@ -51,4 +51,9 @@ class User extends Authenticatable
     public function images() {
         return $this->morphMany(Image::class, 'parentable');
     }
+
+    public function application(){
+        return $this->hasMany(LeaveApplication::class);
+    }
+
 }
